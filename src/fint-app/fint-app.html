@@ -20,10 +20,19 @@
 <paper-material>
   <div id='greeting'></div>
 
-  <iron-selector selected="{{selected}}">
+<paper-button on-tap="gplus" id="login">
+  Log in with Google.
+</paper-button>
+<template is="dom-if" if="{{loggedIn}}">
+<h4>  Hi {{userInfo.displayName}} </h4>
+</template>
 
-     <div  class='menu '>Home/Search</div>
+  <iron-selector attr-for-selected="page" selected="{{selected}}">
 
+     <div page="home"  class='menu '>Home/Search</div>
+<template is="dom-if" if="{{loggedIn}}">
+          <div page="playlist"  class='menu '>Playlist</div>
+        </template>
    </iron-selector>
 
     <div> Search and enjoy...<br>More stuff coming soon.. </div>
@@ -35,8 +44,8 @@
         <h1>Winter</h1> </paper-toolbar>
   </paper-material>
     <div>
-      <iron-pages selected='{{selected}}'>
-        <section>
+      <iron-pages  attr-for-selected="page" selected='{{selected}}'>
+        <section page="home">
           <div class='main center' class="horizontal-section-container">
             <template is="dom-bind" class="center" id="app">
 
@@ -71,12 +80,16 @@
 <br>
 <br>
                 </template>
-              </section>
 
-                </iron-pages>
 
     </div>
   </template>
+</section>
+<section page="playlist">
+
+</section>
+
+  </iron-pages>
           </div>
             <paper-material elevation="1">
           <paper-toolbar   style="color:black; background-color: white; width:100%;" id="footer">
@@ -106,9 +119,16 @@
         keyword: {
           type: String,
           value: 'Music',
+          observer: "ready",
 
 
 
+        },
+        SingleSongSrc:{
+          type:String,
+        },
+        SingleSongTitle:{
+          type:String,
         },
         database: {
           type: Object,
@@ -127,21 +147,41 @@
          type:Object,
        },
        selected:{
-         type:Number,
-         value:0,
+         type:String,
+         value:"home",
+       },
+       userInfo:{
+         type:Object,
+       },
+       loggedIn:{
+         type: Boolean,
+
        },
 
       },
       ready:function(){
+        //ETC....
         var elem = document.getElementById("search");
 elem.onkeyup = function(e){
     if(e.keyCode == 13){
-      var app = document.querySelector('#app');
-app.params = {"part":"snippet", "q":this.keyword, "key": "AIzaSyAuecFZ9xJXbGDkQYWBmYrtzOGJD-iDIgI", "type": "video"};
+      var drawer = document.querySelector('paper-drawer-panel');
+      drawer.closeDrawer();
+
     }
 }
         var app = document.querySelector('#app');
 app.params = {"part":"snippet", "q":this.keyword, "key": "AIzaSyAuecFZ9xJXbGDkQYWBmYrtzOGJD-iDIgI", "type": "video"};
+//remove function
+Element.prototype.remove = function() {
+this.parentElement.removeChild(this);
+}
+NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
+for(var i = this.length - 1; i >= 0; i--) {
+if(this[i] && this[i].parentElement) {
+this[i].parentElement.removeChild(this[i]);
+}
+}
+}
 //Routes
 
 page('/search/:id', function(context){
@@ -149,9 +189,15 @@ page('/search/:id', function(context){
   console.log('Loading results for ', query);
   this.keyword= query;
     });
+    page('/:page', function(context){
+      var page = context.params.page;
 
+      this.selected=page;
+
+        });
 
 page();
+//AUTOPLAY INIT SETUP
 var rec = function() {
   setTimeout(function() {
     if ($('audio').length > 0) {
@@ -161,9 +207,39 @@ var rec = function() {
   }, 10);
 }
 rec();
+//FIREBASE.........
 
       },
+gplus:function(){
+  var provider = new firebase.auth.GoogleAuthProvider();
+  firebase.auth().signInWithPopup(provider).then(function(result) {
+    $("#login").remove();
+    document.querySelector("#login").remove();
+    $("#login").innerHTML = null;
+    document.querySelector("#login").innerHTML = null;
+    // This gives you a Google Access Token. You can use it to access the Google API.
+    var token = result.credential.accessToken;
+    // The signed-in user info.
+    var user = result.user;
+    document.querySelector("fint-app").userInfo = user;
+    console.log(document.querySelector("fint-app").userInfo);
+    document.querySelector("fint-app").loggedIn=true;
+    console.log(document.querySelector("fint-app").loggedIn);
 
+
+    // ...
+  }).catch(function(error) {
+    // Handle Errors here.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // The email of the user's account used.
+    var email = error.email;
+    // The firebase.auth.AuthCredential type that was used.
+    var credential = error.credential;
+    // ...
+  });
+
+},
 
 
 

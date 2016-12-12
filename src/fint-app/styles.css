@@ -27,13 +27,13 @@ iron-selector > * {
 
     }
     .menu{
-      background-color: #eee;
+      background-color: white;
     }
     .horizontal-section {
       padding: 0;
     }
     .iron-selected {
-      background-color: white;
+      background-color: #eee;
       color: black;
     }
     paper-scroll-header-panel {
@@ -233,11 +233,14 @@ li {
     word-spacing : normal;
     z-index : auto;
 }
-#playist,
-audio {
+#playist {
 
   width: 400px;
   padding: 20px;
+}
+audio{
+  padding: 20px;
+
 }
 
 
