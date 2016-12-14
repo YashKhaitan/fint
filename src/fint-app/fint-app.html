@@ -41,7 +41,7 @@
     <paper-material elevation="2">
     <paper-toolbar  style="color:black; background-color: white; width:100%;" id="mainTB">
  <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
-        <h1>Winter</h1> </paper-toolbar>
+        <h1>Pyke</h1> </paper-toolbar>
   </paper-material>
     <div>
       <iron-pages  attr-for-selected="page" selected='{{selected}}'>
@@ -69,6 +69,7 @@
 
                   <div class="card-actions">
                     <a  href="https://www.youtubeinmp3.com/fetch/?video=http://www.youtube.com/watch?v={{item.id.videoId}}">
+                      <link rel="prefetch" href="https://www.youtubeinmp3.com/fetch/?video=http://www.youtube.com/watch?v={{item.id.videoId}}">
 
                   <paper-button raised>Play</paper-button>
 
@@ -223,7 +224,7 @@ gplus:function(){
     var user = result.user;
     document.querySelector("fint-app").userInfo = user;
     console.log(document.querySelector("fint-app").userInfo);
-    document.querySelector("fint-app").loggedIn=true;
+    document.querySelector("fint-app").loggedIn = true;
     console.log(document.querySelector("fint-app").loggedIn);
 
 

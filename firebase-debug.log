@@ -1,0 +1,14 @@
+[debug] ----------------------------------------------------------------------
+[debug] Command:      node /usr/local/bin/firebase serve
+[debug] CLI Version:  3.2.0
+[debug] Platform:     linux
+[debug] Node Version: v0.10.25
+[debug] Time:         Tue Dec 13 2016 06:39:23 GMT-0800 (STD)
+[debug] ----------------------------------------------------------------------
+[debug] 
+[info] Starting Firebase development server...
+[info] 
+[info] Project Directory: /mnt/c/Users/jeffc/Desktop/gitRepos/fint
+[info] Public Directory: /
+[info] 
+[info] Server listening at: http://localhost:5000

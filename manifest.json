@@ -1,6 +1,6 @@
 {
-  "name": "fint",
-  "short_name": "fint",
+  "name": "Pyke",
+  "short_name": "Pyke",
   "description": "Music served through youtube",
   "start_url": "/",
   "display": "standalone"
