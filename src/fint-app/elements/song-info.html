@@ -1,0 +1,34 @@
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<dom-module id="song-play">
+  <template>
+    <style>
+      :host {
+
+      }
+
+          </style>
+          <a  href="{{streamUrl}}">
+
+
+        <paper-button raised>Play</paper-button>
+
+      </a>
+
+  </template>
+  <script>
+     Polymer({
+       is: 'song-play',
+       properties:{
+vid:String,
+streamUrl:String,
+       },
+       ready:function(){
+         var url ='https://www.youtube.com/watch?v=' + this.vid;
+          var endpoint ="/backend/index.php?url="+url;
+
+          $.ajax({type: "GET", url: endpoint, async: false, dataType: "text", success: function (data, textStatus, jqXHR) {s = data;} });
+            return s;
+       },
+     });
+   </script>
+ </dom-module>

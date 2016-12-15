@@ -27,9 +27,9 @@
   Made by Jeff Cheema.
   </h5>
   <br>
-  
+
   <a href="http://github.com/jeffcheema">
-    Github>
+    Github
   </a>
 
 <template is="dom-if" if="{{loggedIn}}">
@@ -77,13 +77,15 @@
                 <paper-card style="width:100%;"class="center" heading="[[item.snippet.title]] " alt="[[item.snippet.title]] " class="white">
 
                   <div class="card-actions">
-                    <a  href="https://www.youtubeinmp3.com/fetch/?video=http://www.youtube.com/watch?v={{item.id.videoId}}">
-                      <link rel="prefetch" href="https://www.youtubeinmp3.com/fetch/?video=http://www.youtube.com/watch?v={{item.id.videoId}}">
+                <song-play vid="[[item.id.videoId]]">
+                </song-play>
 
-                  <paper-button raised>Play</paper-button>
+                <a  href="http://techberge.com/etc/backend.php?url=[[item.id.videoId]]">
+
+
+              <paper-button raised>Play</paper-button>
 
               </a>
-
                   </div>
                 </span>
                 </paper-card>
@@ -223,6 +225,8 @@ rec();
 gplus:function(){
   var provider = new firebase.auth.GoogleAuthProvider();
   firebase.auth().signInWithPopup(provider).then(function(result) {
+    console.log("logging in..")
+        document.querySelector("fint-app").userInfo = result.user;
     $("#login").remove();
     document.querySelector("#login").remove();
     $("#login").innerHTML = null;
@@ -231,7 +235,7 @@ gplus:function(){
     var token = result.credential.accessToken;
     // The signed-in user info.
     var user = result.user;
-    document.querySelector("fint-app").userInfo = user;
+    document.querySelector("fint-app").userInfo = result.user;
     console.log(document.querySelector("fint-app").userInfo);
     document.querySelector("fint-app").loggedIn = true;
     console.log(document.querySelector("fint-app").loggedIn);
