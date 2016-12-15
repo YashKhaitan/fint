@@ -23,14 +23,10 @@
 <paper-button on-tap="gplus" id="login">
   Log in with Google.
 </paper-button>
-<h5>
-  Made by Jeff Cheema.
-  </h5>
+
   <br>
 
-  <a href="http://github.com/jeffcheema">
-    Github
-  </a>
+
 
 <template is="dom-if" if="{{loggedIn}}">
 <h4>  Hi {{userInfo.displayName}} </h4>
@@ -42,9 +38,17 @@
 <template is="dom-if" if="{{loggedIn}}">
           <div page="playlist"  class='menu '>Playlist</div>
         </template>
-   </iron-selector>
+   </iron-selector
+   <br>
+   <br><br>
 
-    <div> Search and enjoy...<br>More stuff coming soon.. </div>
+    <div> Search and enjoy...<br>More stuff coming soon.. <br> Made by Jeff Cheema
+<br>
+<a href="http://github.com/jeffcheema">
+  Github
+</a>
+    </div>
+
   </paper-scroll-header-panel>
   <paper-scroll-header-panel main>
     <paper-material elevation="2">
@@ -86,6 +90,9 @@
               <paper-button raised>Play</paper-button>
 
               </a>
+              <br>
+              <add-playlist title="[[item.snippet.title]]" src="http://techberge.com/etc/backend.php?url=[[item.id.videoId]]">
+              </add-playlist>
                   </div>
                 </span>
                 </paper-card>
@@ -149,6 +156,9 @@
          type: Boolean,
 
        },
+       db:{
+         type:String,
+       },
        user:{
          type:Object,
        },
@@ -167,11 +177,13 @@
        },
        loggedIn:{
          type: Boolean,
+         value:false,
 
        },
 
       },
       ready:function(){
+         this.db= (function() { var result; $.ajax({ type:'GET', url:"https://finty-c6733.firebaseio.com/.json?pretty-print=true", dataType:'json', async:false, success:function(data){ result = data; } }); return result; })();
         //ETC....
         var elem = document.getElementById("search");
 elem.onkeyup = function(e){
@@ -225,20 +237,36 @@ rec();
 gplus:function(){
   var provider = new firebase.auth.GoogleAuthProvider();
   firebase.auth().signInWithPopup(provider).then(function(result) {
-    console.log("logging in..")
-        document.querySelector("fint-app").userInfo = result.user;
-    $("#login").remove();
-    document.querySelector("#login").remove();
-    $("#login").innerHTML = null;
-    document.querySelector("#login").innerHTML = null;
+    ajaxUrl = firebase.database().ref('users/' + result.user.uid) + "/.json";
+  userInfo = (function() { var result; $.ajax({ type:'GET', url:ajaxUrl, dataType:'json', async:false, success:function(data){ result = data; } }); return result; })();
+
+    if (userInfo == null){
+    firebase.database().ref('users/' + result.user.uid).set({
+       username: result.user.displayName,
+       email: result.user.email,
+       profile_picture : result.user.photoURL
+     });
+
+     $("#login").remove();
+     document.querySelector("fint-app").loggedIn = true;
+ console.log("logging in..")
+     document.querySelector("fint-app").userInfo = result.user;
+   } else{
+     console.log("user exists..")
+
+  $("#login").remove();
+     document.querySelector("fint-app").loggedIn = true;
+ console.log("logging in..")
+     document.querySelector("fint-app").userInfo = result.user;
+   }
+
+
+
     // This gives you a Google Access Token. You can use it to access the Google API.
     var token = result.credential.accessToken;
     // The signed-in user info.
     var user = result.user;
-    document.querySelector("fint-app").userInfo = result.user;
-    console.log(document.querySelector("fint-app").userInfo);
-    document.querySelector("fint-app").loggedIn = true;
-    console.log(document.querySelector("fint-app").loggedIn);
+
 
 
     // ...
