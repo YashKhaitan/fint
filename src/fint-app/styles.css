@@ -9,6 +9,9 @@ height: 30%;
 
 background-size: cover;
 }
+li{
+  text-decoration:none;
+}
 .rate-content {
 @apply(--layout-flex);
 float: left;
@@ -269,7 +272,7 @@ li a:hover {
    right: 0;
     width: 100%;
 }
-#audio {
+#audio, #uAudio {
     width: 500;
     margin: 0 auto;
 }
@@ -296,6 +299,6 @@ audio{
 }
 paper-toolbar{
 color:black;
-background-color: white;
+background-color: pink;
 width:100%;
 }
